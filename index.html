@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>LinguaKids</title>
+  <link rel="stylesheet" href="style.css" />
+
+
+</head>
+
+<body>
+
+  <!-- HOŞ GELDİNİZ EKRANI -->
+  <div id="welcome-screen" class="screen active bg-welcome">
+    <h1 class="logo">LinguaKids 🎮</h1>
+    <p class="subtitle">Eğlenerek Dil Öğren</p>
+  </div>
+
+  <!-- MENÜ EKRANI -->
+  <div id="menu-screen" class="screen bg-welcome">
+    <h2>Menü</h2>
+    <div class="menu-buttons">
+      <button onclick="startGame()">▶ Oyna</button>
+      <button id="matchingBtn" style="display:none;" onclick="startMatching()">🧩 Eşleştirme</button>
+      <button id="voiceBtn" style="display:none;" onclick="startVoiceMode()">🎤 Sesli Komut</button>
+      <button onclick="openSettings()">⚙ Ayarlar</button>
+    </div>
+  </div>
+
+  <!-- OYUN EKRANI (MEVCUT UYGULAMAN) -->
+  <div id="game-screen" class="screen">
+    <div class="animated-bg">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div class="container">
+      <h1> LinguaKids 🎮</h1>
+
+
+
+      <div id="user-info">
+        <p>⭐ Level: <span id="level">-</span></p>
+        <p>🔥 Puan: <span id="score">-</span></p>
+      </div>
+
+      <div class="xp-container">
+        <div class="xp-bar" id="xpBar"></div>
+      </div>
+
+      <div id="game-box" class="card">
+        <div class="image-box">
+          <img id="wordImage" src="" />
+        </div>
+        <h2 id="word">Kelime yükleniyor...</h2>
+        <p id="feedback"></p>
+      </div>
+
+      <div class="input-area">
+        <input type="text" id="answerInput" placeholder="Cevabı yaz..." />
+        <button type="button" id="submitBtn">Tamam</button>
+      </div>
+      <div style="text-align: center; margin-top: 10px;">
+        <button type="button" id="hintBtn" onclick="showHint()" style="background-color: #ffb74d; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: transform 0.2s;">💡 İpucu Al</button>
+        <p id="hintText" style="display: none; font-size: 15px; font-weight: bold; color: #d84315; margin-top: 8px; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);"></p>
+      </div>
+
+      <button id="restartBtn" onclick="restartGame()" style="display:none;">
+        🔁 Yeni Tur Başla
+      </button>
+      <button onclick="showScreen('menu-screen')"
+        style="margin-top:10px; width:100%; padding:10px; font-size:15px; font-weight:700; border-radius:14px; border:none; background:rgba(255,255,255,0.85); color:#333; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.1);">⬅
+        Ana Menüye Dön</button>
+    </div>
+
+  </div>
+
+
+  <!-- MATCHING SCREEN -->
+  <div id="matching-screen" class="screen">
+    <div class="container">
+      <h1>🧩 Eşleştirme Modu</h1>
+
+      <div class="top-bar">
+        <div class="info-box">⭐ Skor: <span id="matchingScoreText">0</span></div>
+        <div class="info-box">🏆 Level: <span id="matchingLevel">1</span></div>
+      </div>
+
+      <div class="xp-container">
+        <div class="xp-bar" id="matchingMainXpBar"></div>
+      </div>
+
+      <div class="matching-area">
+        <div id="leftColumn" class="column"></div>
+        <div id="rightColumn" class="column"></div>
+      </div>
+
+      <button onclick="showScreen('menu-screen')">⬅ Menü</button>
+    </div>
+  </div>
+
+  <!-- VOICE SCREEN -->
+  <div id="voice-screen" class="screen">
+    <div class="container" style="padding: 10px 14px;">
+      <h1>LinguaKids 🎮</h1>
+      <h2
+        style="font-size: 18px; color: #fff; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); text-align: center; margin-bottom: 8px;">
+        🎤 Telaffuz Pratiği</h2>
+
+      <div class="top-bar" style="margin-bottom: 4px;">
+        <div class="info-box">⭐ Skor: <span id="voiceScoreText">0</span></div>
+        <div class="info-box">🏆 Level: <span id="voiceLevel">1</span></div>
+      </div>
+
+      <div class="xp-container" style="margin-bottom: 12px;">
+        <div class="xp-bar" id="voiceMainXpBar"></div>
+      </div>
+
+      <div id="voice-game-box" class="card" style="text-align: center; padding: 12px 16px;">
+
+        <p style="font-size: 13px; font-weight: bold; color: #666; margin-bottom: 6px;">Okuman Gereken Cümle:</p>
+        <h2 id="voiceWord"
+          style="margin-top: 0; margin-bottom: 4px; font-size: 20px; color: #1e3c72; line-height: 1.2;">Cümle
+          yükleniyor...</h2>
+
+        <button onclick="playWordAudio()"
+          style="margin: 4px auto 8px; padding: 6px 14px; border-radius: 14px; border: none; background: linear-gradient(135deg, #a1c4fd, #c2e9fb); font-weight: 800; font-size: 13px; color: #1565c0; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s;">
+          🔊 Sesli Dinle
+        </button>
+
+        <div class="transcript-box" id="transcriptBox">
+          <p id="liveTranscript" class="placeholder">Sen konuşurken söylediklerin burada belirecek...</p>
+        </div>
+
+        <button id="micBtn" class="mic-button" onclick="startListening()" style="margin-top: 8px;">
+          <span class="mic-icon">🎤</span>
+        </button>
+        <p id="micStatus" style="font-size: 13px; font-weight: bold; color: #555; margin-top: 6px;">Konuşmak için
+          tıklayın</p>
+
+        <p id="voiceFeedback" style="font-size: 16px; font-weight: bold; margin-top: 10px; min-height: 20px;"></p>
+      </div>
+
+      <button onclick="showScreen('menu-screen')"
+        style="width: 100%; margin-top: 10px; padding: 12px; font-size: 15px; font-weight: 800; border-radius: 16px; border: none; background: rgba(255,255,255,0.9); color: #333; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">⬅
+        Ana Menüye Dön</button>
+    </div>
+  </div>
+
+  <!-- LEVEL UP MODAL -->
+  <div id="levelModal" class="modal">
+    <div class="modal-content">
+      <h2 id="levelTitle">🎉 Level Up!</h2>
+      <p id="levelMessage"></p>
+      <button onclick="closeLevelModal()">Tamam</button>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <h2 style="color: #1e3c72; margin-bottom: 20px;">⚙ Ayarlar</h2>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 10px; background: #f8f9fa; border-radius: 12px;">
+        <span style="font-weight: 700; color: #333;">🔊 Ses Efektleri</span>
+        <label class="switch">
+          <input type="checkbox" id="soundToggle" checked onchange="toggleSound()">
+          <span class="slider round"></span>
+        </label>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 10px; background: #f8f9fa; border-radius: 12px;">
+        <span style="font-weight: 700; color: #333;">🎵 Arka Plan Müziği</span>
+        <label class="switch">
+          <input type="checkbox" id="musicToggle" checked onchange="toggleMusic()">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div style="margin-bottom: 20px; padding: 10px; background: #f8f9fa; border-radius: 12px; text-align: center;">
+        <p style="font-weight: 700; color: #333; margin-bottom: 10px;">🎨 Tema Seçimi</p>
+        <div class="theme-switcher" style="position: static; transform: none; display: flex; justify-content: center; gap: 15px;">
+          <button onclick="setTheme('light')">☀️</button>
+          <button onclick="setTheme('dark')">🌙</button>
+          <button onclick="setTheme('kids')">🌈</button>
+        </div>
+      </div>
+      <button onclick="closeSettings()" style="width: 100%; background: linear-gradient(135deg, #1e3c72, #2a5298); color: white;">Kapat</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+
+</html>
